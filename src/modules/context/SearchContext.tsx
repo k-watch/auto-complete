@@ -10,10 +10,18 @@ const SearchContext = createContext<any>(null);
 const SearchContextProvider = ({ children }: { children: React.ReactNode }) => {
   const [searchText, setSearchText] = useState<any>();
   const [searchList, setSearchList] = useState<any>();
+  const [searchIndex, setSearchIndex] = useState<number>(-1);
 
   return (
     <SearchContext.Provider
-      value={{ searchText, setSearchText, searchList, setSearchList }}
+      value={{
+        searchText,
+        setSearchText,
+        searchList,
+        setSearchList,
+        searchIndex,
+        setSearchIndex,
+      }}
     >
       {/* <SearchUpdateContext.Provider value={setSearchList}> */}
       {children}
