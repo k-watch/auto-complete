@@ -2,27 +2,26 @@ import { searchSelector } from 'modules/search/search';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { SearchProps } from './SearchList';
 
-const checkText = (text: string, query: string) => {
-  if (query !== '' && text.includes(query)) {
-    const parts = text.split(new RegExp(`(${query})`, 'gi'));
-    return parts;
+const checkWord = (resultWord: string, searchWord: string) => {
+  if (resultWord.toUpperCase().includes(searchWord.toUpperCase())) {
+    return resultWord.split(new RegExp(`(${searchWord})`, 'gi'));
   }
 };
 
-const SearchItem = ({ search }: any) => {
+const SearchItem = (search: SearchProps) => {
   const [parts, setParts] = useState<string[] | undefined>();
   const { searchWord } = useSelector(searchSelector);
 
   useEffect(() => {
     if (search) {
-      const temp = checkText(search.sickNm, searchWord);
-      setParts(temp);
+      setParts(checkWord(search.sickNm, searchWord));
     }
   }, [search]);
 
   return (
-    <S.Wrap>
+    <>
       {parts &&
         parts.map((part, index) =>
           part.toUpperCase() === searchWord.toUpperCase() ? (
@@ -31,18 +30,13 @@ const SearchItem = ({ search }: any) => {
             part
           )
         )}
-    </S.Wrap>
+    </>
   );
 };
 
 export default SearchItem;
 
 const S = {
-  Wrap: styled.div`
-    /* overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap; */
-  `,
   Highlight: styled.span`
     color: orange;
     font-weight: bold;

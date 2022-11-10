@@ -1,5 +1,6 @@
 import { IDBPDatabase, openDB } from 'idb';
 import { SearchDBInterface, SearchInterface } from 'types/api';
+import { EXPIRE_TIME } from 'types/enum';
 
 let db: IDBPDatabase;
 
@@ -21,7 +22,7 @@ export const get = async (
   value: IDBValidKey
 ): Promise<SearchInterface[] | null> => {
   const store = db.transaction('search').objectStore('search');
-  const result = (await store.get(value)) as SearchDBInterface;
+  const result = await store.get(value);
 
   if (result) {
     if (result.expireTime <= Date.now()) {
@@ -37,6 +38,6 @@ export const add = async <T>(value: IDBValidKey, data: T) => {
   await db.add('search', {
     id: value,
     data,
-    expireTime: new Date().getTime() + 1000 * 60 * 5,
+    expireTime: new Date().getTime() + EXPIRE_TIME,
   });
 };

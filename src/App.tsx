@@ -8,12 +8,12 @@ import Router from './routes';
 function App() {
   return (
     <>
-      <Provider store={store}>
-        <GlobalStyle />
-        <ThemeProvider theme={Theme}>
+      <GlobalStyle />
+      <ThemeProvider theme={Theme}>
+        <Provider store={store}>
           <Router />
-        </ThemeProvider>
-      </Provider>
+        </Provider>
+      </ThemeProvider>
     </>
   );
 }

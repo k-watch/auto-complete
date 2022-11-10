@@ -2,8 +2,14 @@ import { searchSelector } from 'modules/search/search';
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { absoluteCenter, flexBox } from 'styles/mixins';
 import { SEARCH_MOVE_DIR } from 'types/enum';
 import SearchItem from './SearchItem';
+
+export interface SearchProps {
+  sickCd: string;
+  sickNm: string;
+}
 
 const SearchList = () => {
   const autoRef = useRef<any>(null);
@@ -14,6 +20,7 @@ const SearchList = () => {
     if (autoRef.current) {
       // 스크롤이 존재하면
       if (autoRef.current.scrollHeight > autoRef.current.offsetHeight) {
+        console.log('ok');
         const val = autoRef.current.children[searchMoveIndex].offsetHeight + 20;
         const end = searchList.length - 5;
         if (searchMoveIndex < end) {
@@ -32,16 +39,18 @@ const SearchList = () => {
 
   return (
     <S.Wrap ref={autoRef}>
-      {searchList && searchList.length > 0
-        ? searchList.map((search: any, idx: any) => (
-            <S.Item
-              key={search.sickCd}
-              isFocus={searchMoveIndex === idx ? true : false}
-            >
-              <SearchItem search={search} />
-            </S.Item>
-          ))
-        : '검색어 없음'}
+      {searchList && searchList.length > 0 ? (
+        searchList.map((search: SearchProps, index: number) => (
+          <S.Item
+            key={search.sickCd}
+            isFocus={searchMoveIndex === index ? true : false}
+          >
+            <SearchItem {...search} />
+          </S.Item>
+        ))
+      ) : (
+        <S.NotSearchResult>검색어 없음</S.NotSearchResult>
+      )}
     </S.Wrap>
   );
 };
@@ -59,5 +68,9 @@ const S = {
   Item: styled.li<{ isFocus?: boolean }>`
     margin-bottom: 20px;
     background-color: ${(props) => (props.isFocus ? '#edf5f5' : '#fff')};
+  `,
+
+  NotSearchResult: styled.li`
+    ${flexBox()}
   `,
 };

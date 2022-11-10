@@ -11,5 +11,7 @@ export const SEARCH_MOVE_DIR = {
   DOWN: 'ArrowDown',
 } as const;
 
+export const EXPIRE_TIME = 1000 * 60 * 5;
+
 export type SearchMoveDir =
   typeof SEARCH_MOVE_DIR[keyof typeof SEARCH_MOVE_DIR];

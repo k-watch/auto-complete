@@ -1,6 +1,6 @@
 import getSearchList from 'api/search';
 import { useRef } from 'react';
-import { SEARCH_MOVE_DIR } from 'types/enum';
+import { EXPIRE_TIME, SEARCH_MOVE_DIR } from 'types/enum';
 import { useSelector } from 'react-redux';
 import {
   searchSelector,
@@ -12,6 +12,7 @@ import {
 import { store } from 'modules/store';
 import { add, get } from 'api/service';
 import { SearchInterface } from 'types/api';
+import { dbInstance } from 'api/service/dbInstance';
 
 let timer: NodeJS.Timeout;
 
@@ -28,7 +29,7 @@ const SearchBar = () => {
       const { value } = e.target;
 
       if (value) {
-        const searchData = await get(value);
+        const searchData = await dbInstance.get(value);
 
         if (searchData) {
           store.dispatch(setSearchWord(value));
@@ -41,7 +42,11 @@ const SearchBar = () => {
           sickNm_like: value,
         });
 
-        await add(value, data);
+        await dbInstance.add({
+          id: value,
+          data,
+          expireTime: new Date().getTime() + EXPIRE_TIME,
+        });
 
         store.dispatch(setSearchWord(value));
         store.dispatch(setSearchList(data));
