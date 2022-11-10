@@ -1,25 +1,34 @@
-import { useSearch } from 'modules/context/SearchContext';
-import { useEffect, useRef, useState } from 'react';
+import { searchSelector } from 'modules/search/search';
+import { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { SEARCH_MOVE_DIR } from 'types/enum';
 import SearchItem from './SearchItem';
 
 const SearchList = () => {
-  const { searchList, setSearchIndex, searchIndex } = useSearch();
-  const autoRef = useRef<HTMLUListElement>(null);
+  const autoRef = useRef<any>(null);
+  const { searchList, searchMoveDir, searchMoveIndex } =
+    useSelector(searchSelector);
 
   useEffect(() => {
     if (autoRef.current) {
       // 스크롤이 존재하면
       if (autoRef.current.scrollHeight > autoRef.current.offsetHeight) {
-        const len = searchList.length / 2;
-        if (searchIndex > len) {
-          autoRef.current?.scrollBy({ top: +35 });
-        } else if (searchIndex < len) {
-          autoRef.current?.scrollBy({ top: -35 });
+        const val = autoRef.current.children[searchMoveIndex].offsetHeight + 20;
+        const end = searchList.length - 5;
+        if (searchMoveIndex < end) {
+          if (searchMoveDir === SEARCH_MOVE_DIR.UP)
+            autoRef.current?.scrollBy({
+              top: -`${val}`,
+            });
+        }
+        if (searchMoveIndex > 5) {
+          if (searchMoveDir === SEARCH_MOVE_DIR.DOWN)
+            autoRef.current?.scrollBy({ top: val });
         }
       }
     }
-  }, [searchIndex]);
+  }, [searchMoveIndex]);
 
   return (
     <S.Wrap ref={autoRef}>
@@ -27,7 +36,7 @@ const SearchList = () => {
         ? searchList.map((search: any, idx: any) => (
             <S.Item
               key={search.sickCd}
-              isFocus={searchIndex === idx ? true : false}
+              isFocus={searchMoveIndex === idx ? true : false}
             >
               <SearchItem search={search} />
             </S.Item>

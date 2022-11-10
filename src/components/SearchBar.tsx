@@ -1,24 +1,24 @@
 import getSearchList from 'api/search';
 import { openDB } from 'idb';
-import { useSearch } from 'modules/context/SearchContext';
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { SEARCH_MOVE_DIR } from 'types/enum';
+import { useSelector } from 'react-redux';
+import {
+  searchSelector,
+  setSearchList,
+  setSearchMoveDir,
+  setSearchMoveIndex,
+  setSearchWord,
+} from 'modules/search/search';
+import { store } from 'modules/store';
 
 let timer: NodeJS.Timeout;
-const ArrowDown = 'ArrowDown';
-const ArrowUp = 'ArrowUp';
-const Escape = 'Escape';
 
 let db;
 
 const SearchBar = () => {
   const searchRef = useRef(null);
-  const {
-    searchList,
-    setSearchText,
-    setSearchList,
-    setSearchIndex,
-    searchIndex,
-  } = useSearch();
+  const { searchList, searchMoveIndex } = useSelector(searchSelector);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (timer) {
@@ -26,7 +26,6 @@ const SearchBar = () => {
     }
     timer = setTimeout(async () => {
       const { value } = e.target;
-      console.log(value);
 
       if (value) {
         db = await openDB('SearchDB', 1, {
@@ -39,30 +38,29 @@ const SearchBar = () => {
           },
         });
         let tx = db.transaction('search');
-        let store = tx.objectStore('search');
+        let st = tx.objectStore('search');
 
-        let re = await store.get(value);
+        let re = await st.get(value);
         if (re) {
           if (re.expireTime <= Date.now()) {
             db.delete('search', value);
           } else {
-            setSearchText(value);
-            setSearchList(re.data);
+            store.dispatch(setSearchWord(value));
+            store.dispatch(setSearchList(re.data));
             return;
           }
         }
 
-        const data = await getSearchList<any>({ q: value });
+        const data = await getSearchList<any>({ sickNm_like: value });
 
         re = await db.add('search', {
           id: value,
           data: data,
           expireTime: new Date().getTime() + 1000 * 60 * 5,
         });
-        console.info('calling api');
 
-        setSearchText(value);
-        setSearchList(data);
+        store.dispatch(setSearchWord(value));
+        store.dispatch(setSearchList(data));
       }
     }, 100);
   };
@@ -70,18 +68,17 @@ const SearchBar = () => {
   const handleKeyArrow = (e: React.KeyboardEvent) => {
     if (searchList && searchList.length > 0) {
       switch (e.key) {
-        case ArrowDown: //키보드 아래 키
-          if (searchIndex + 1 < searchList.length) {
-            setSearchIndex(searchIndex + 1);
+        case SEARCH_MOVE_DIR.DOWN: //키보드 아래 키
+          if (searchMoveIndex + 1 < searchList.length) {
+            store.dispatch(setSearchMoveIndex(searchMoveIndex + 1));
+            store.dispatch(setSearchMoveDir(SEARCH_MOVE_DIR.DOWN));
           }
           break;
-        case ArrowUp: //키보드 위에 키
-          if (searchIndex - 1 > -1) {
-            setSearchIndex(searchIndex - 1);
+        case SEARCH_MOVE_DIR.UP: //키보드 위에 키
+          if (searchMoveIndex - 1 > -1) {
+            store.dispatch(setSearchMoveIndex(searchMoveIndex - 1));
+            store.dispatch(setSearchMoveDir(SEARCH_MOVE_DIR.UP));
           }
-          break;
-        case Escape: // esc key를 눌렀을때,
-          setSearchIndex(-1);
           break;
       }
     }
