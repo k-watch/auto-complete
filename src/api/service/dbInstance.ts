@@ -1,4 +1,5 @@
 import { IDBPDatabase, openDB } from 'idb';
+import { SearchDBInterface } from 'types/api';
 
 const DB_INFO = {
   DB_NAME: 'SearchDB',
@@ -18,17 +19,19 @@ export class DbInstance {
     const data = await openDB(DB_INFO.DB_NAME, 1, {
       upgrade(db) {
         const store = db.createObjectStore(DB_INFO.SCHEMA_NAME, {
-          keyPath: DB_INFO.SCHEMA_NAME,
+          keyPath: DB_INFO.KEY_PATH,
           autoIncrement: true,
         });
-        store.createIndex(DB_INFO.SCHEMA_NAME, DB_INFO.SCHEMA_NAME);
+        store.createIndex(DB_INFO.KEY_PATH, DB_INFO.KEY_PATH);
       },
     });
 
     this.db = data;
   };
 
-  get = async (value: IDBValidKey) => {
+  get = async (
+    value: IDBValidKey
+  ): Promise<SearchDBInterface | undefined | null> => {
     if (this.db) {
       const store = this.db
         .transaction(DB_INFO.SCHEMA_NAME)

@@ -10,10 +10,6 @@ const SELECT_POS = {
   CENTER: 5,
 } as const;
 
-const MARGIN = {
-  BOTTOM: 20,
-} as const;
-
 export interface SearchProps {
   sickCd: string;
   sickNm: string;
@@ -28,12 +24,10 @@ const SearchList = () => {
     if (ulRef.current) {
       const refCurrent = ulRef.current;
 
-      // 스크롤이 존재 확인
+      // 스크롤 존재 확인
       if (refCurrent.scrollHeight > refCurrent.offsetHeight) {
         const liElement = refCurrent.children[searchMoveIndex] as HTMLLIElement;
-        // elHeight = el 요소 높이 값 + margin
-        const elHeight = liElement.offsetHeight + MARGIN.BOTTOM;
-        debugger;
+        const elHeight = liElement.offsetHeight;
         // elEnd = el 요소 마지막 값
         const elEnd = searchList.length - SELECT_POS.CENTER;
 
@@ -74,14 +68,20 @@ export default SearchList;
 const S = {
   Wrap: styled.ul`
     height: 400px;
-    padding: 20px;
     overflow: auto;
-    border: 1px solid black;
+    margin-top: 30px;
+    background-color: white;
+    border-radius: 20px;
+    scrollbar-width: none;
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
   `,
 
   Item: styled.li<{ isSelect?: boolean }>`
-    margin-bottom: 20px;
-    background-color: ${(props) => (props.isSelect ? '#edf5f5' : '#fff')};
+    padding: 10px 10px;
+    background-color: ${(props) => (props.isSelect ? '#f0f0f0' : '#fffff')};
   `,
 
   NotSearchResult: styled.li`

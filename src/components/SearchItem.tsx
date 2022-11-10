@@ -38,7 +38,6 @@ export default SearchItem;
 
 const S = {
   Highlight: styled.span`
-    color: orange;
     font-weight: bold;
   `,
 };
