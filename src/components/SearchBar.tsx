@@ -1,5 +1,4 @@
 import getSearchList from 'api/search';
-import { openDB } from 'idb';
 import { useRef } from 'react';
 import { SEARCH_MOVE_DIR } from 'types/enum';
 import { useSelector } from 'react-redux';
@@ -11,10 +10,10 @@ import {
   setSearchWord,
 } from 'modules/search/search';
 import { store } from 'modules/store';
+import { add, get } from 'api/service';
+import { SearchInterface } from 'types/api';
 
 let timer: NodeJS.Timeout;
-
-let db;
 
 const SearchBar = () => {
   const searchRef = useRef(null);
@@ -24,45 +23,30 @@ const SearchBar = () => {
     if (timer) {
       clearTimeout(timer);
     }
+
     timer = setTimeout(async () => {
       const { value } = e.target;
 
       if (value) {
-        db = await openDB('SearchDB', 1, {
-          upgrade(db) {
-            const store = db.createObjectStore('search', {
-              keyPath: 'id',
-              autoIncrement: true,
-            });
-            store.createIndex('id', 'id');
-          },
-        });
-        let tx = db.transaction('search');
-        let st = tx.objectStore('search');
+        const searchData = await get(value);
 
-        let re = await st.get(value);
-        if (re) {
-          if (re.expireTime <= Date.now()) {
-            db.delete('search', value);
-          } else {
-            store.dispatch(setSearchWord(value));
-            store.dispatch(setSearchList(re.data));
-            return;
-          }
+        if (searchData) {
+          store.dispatch(setSearchWord(value));
+          store.dispatch(setSearchList(searchData));
+
+          return;
         }
 
-        const data = await getSearchList<any>({ sickNm_like: value });
-
-        re = await db.add('search', {
-          id: value,
-          data: data,
-          expireTime: new Date().getTime() + 1000 * 60 * 5,
+        const data = await getSearchList<SearchInterface[]>({
+          sickNm_like: value,
         });
+
+        await add(value, data);
 
         store.dispatch(setSearchWord(value));
         store.dispatch(setSearchList(data));
       }
-    }, 100);
+    }, 300);
   };
 
   const handleKeyArrow = (e: React.KeyboardEvent) => {

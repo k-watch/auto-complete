@@ -1,7 +1,6 @@
 import { SearchInterface } from 'types/api';
 import { SearchMoveDir, SEARCH_MOVE_DIR } from 'types/enum';
 import { createSlice } from '@reduxjs/toolkit';
-import { WritableDraft } from 'immer/dist/internal';
 
 interface SearchState {
   searchWord: string;
@@ -25,6 +24,7 @@ export const searchSlice = createSlice({
       state.searchWord = word;
     },
     setSearchList(state, { payload: list }) {
+      console.log(state.searchList, list);
       state.searchList = [...list];
     },
     setSearchMoveIndex(state, { payload: index }) {
@@ -43,8 +43,6 @@ export const {
   setSearchMoveDir,
 } = searchSlice.actions;
 
-// export const searchSelector = (state: WritableDraft<SearchState>) => state;
-
-export const searchSelector = (state: any) => state.search as SearchState;
+export const searchSelector = (state: any) => state.search;
 
 export default searchSlice.reducer;

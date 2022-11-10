@@ -1,6 +1,5 @@
-/* eslint-disable quotes */
 import { searchSelector } from 'modules/search/search';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -26,7 +25,7 @@ const SearchItem = ({ search }: any) => {
     <S.Wrap>
       {parts &&
         parts.map((part, index) =>
-          part.toLowerCase() === searchWord ? (
+          part.toUpperCase() === searchWord.toUpperCase() ? (
             <S.Highlight key={index}>{part}</S.Highlight>
           ) : (
             part
