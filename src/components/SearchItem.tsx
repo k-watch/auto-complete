@@ -1,8 +1,8 @@
+import { SearchProps } from './SearchList';
 import { searchSelector } from 'modules/search/search';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { SearchProps } from './SearchList';
 
 const checkWord = (resultWord: string, searchWord: string) => {
   if (resultWord.toUpperCase().includes(searchWord.toUpperCase())) {
@@ -11,23 +11,23 @@ const checkWord = (resultWord: string, searchWord: string) => {
 };
 
 const SearchItem = (search: SearchProps) => {
-  const [parts, setParts] = useState<string[] | undefined>();
+  const [words, setWords] = useState<string[] | undefined>();
   const { searchWord } = useSelector(searchSelector);
 
   useEffect(() => {
     if (search) {
-      setParts(checkWord(search.sickNm, searchWord));
+      setWords(checkWord(search.sickNm, searchWord));
     }
   }, [search]);
 
   return (
     <>
-      {parts &&
-        parts.map((part, index) =>
-          part.toUpperCase() === searchWord.toUpperCase() ? (
-            <S.Highlight key={index}>{part}</S.Highlight>
+      {words &&
+        words.map((word, index) =>
+          word.toUpperCase() === searchWord.toUpperCase() ? (
+            <S.Highlight key={index}>{word}</S.Highlight>
           ) : (
-            part
+            word
           )
         )}
     </>

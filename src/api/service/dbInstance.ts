@@ -8,10 +8,8 @@ const DB_INFO = {
 
 export class DbInstance {
   private db: IDBPDatabase | null;
-  private schemaName: string;
 
-  constructor(schemaName: string) {
-    this.schemaName = schemaName;
+  constructor() {
     this.db = null;
     this.create();
   }
@@ -33,13 +31,13 @@ export class DbInstance {
   get = async (value: IDBValidKey) => {
     if (this.db) {
       const store = this.db
-        .transaction(this.schemaName)
-        .objectStore(this.schemaName);
+        .transaction(DB_INFO.SCHEMA_NAME)
+        .objectStore(DB_INFO.SCHEMA_NAME);
       const result = await store.get(value);
 
       if (result) {
         if (result.expireTime <= Date.now()) {
-          this.db.delete(this.schemaName, value);
+          this.db.delete(DB_INFO.SCHEMA_NAME, value);
           return null;
         }
         return result.data;
@@ -50,9 +48,9 @@ export class DbInstance {
 
   add = async <T>(data: T) => {
     if (this.db) {
-      await this.db.add(this.schemaName, { ...data });
+      await this.db.add(DB_INFO.SCHEMA_NAME, { ...data });
     }
   };
 }
 
-export const dbInstance = new DbInstance(DB_INFO.SCHEMA_NAME);
+export const dbInstance = new DbInstance();

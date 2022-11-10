@@ -12,7 +12,7 @@ interface SearchState {
 const initialState: SearchState = {
   searchWord: '',
   searchList: [],
-  searchMoveIndex: -1,
+  searchMoveIndex: 0,
   searchMoveDir: SEARCH_MOVE_DIR.UP,
 };
 
@@ -24,7 +24,6 @@ export const searchSlice = createSlice({
       state.searchWord = word;
     },
     setSearchList(state, { payload: list }) {
-      console.log(state.searchList, list);
       state.searchList = [...list];
     },
     setSearchMoveIndex(state, { payload: index }) {
