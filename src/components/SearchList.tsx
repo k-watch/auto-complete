@@ -93,7 +93,6 @@ const S = {
   `,
 
   Item: styled.li<{ isSelect?: boolean }>`
-    padding: 10px 10px;
     background-color: ${(props) => (props.isSelect ? '#f0f0f0' : 'white')};
   `,
 

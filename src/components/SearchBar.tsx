@@ -1,3 +1,5 @@
+import { CacheInterface } from 'types/api';
+import { CacheInstance } from 'service/cacheInstance';
 import { useState } from 'react';
 import { EXPIRE_TIME, SEARCH_MOVE_DIR } from 'types/enum';
 import { useDebounce } from 'modules/hooks/useDebounce';
@@ -10,13 +12,13 @@ import {
   setSearchWord,
 } from 'modules/search/search';
 import { store } from 'modules/store';
-import { SearchDBInterface } from 'types/api';
-import { dbInstance } from 'service/dbInstance';
 import { getSearchList } from 'api/search';
-import { ReactComponent as Search } from 'styles/icons/search.svg';
+import { ReactComponent as SearchIcon } from 'styles/icons/search.svg';
 import styled from 'styled-components';
 
 const DELAY_TIME = 300;
+
+const cacheInstance = new CacheInstance<string, CacheInterface>();
 
 const SearchBar = () => {
   const [searchText, setSearchText] = useState('');
@@ -25,18 +27,22 @@ const SearchBar = () => {
   const processSearchResult = async () => {
     if (searchText) {
       store.dispatch(setSearchMoveIndex(0));
-      // IndexedDB 에서 검색 결과 있는지 확인
-      const searchData = await dbInstance.get(searchText);
+      // 검색 결과 캐싱되어 있는지 확인
+      const searchData = cacheInstance.get(searchText);
 
-      // 결과 있으면 api 호출 패스
+      // 캐싱됐으면 만료시간 전이면 api 호출 패스
       if (searchData) {
-        store.dispatch(setSearchWord(searchText));
-        store.dispatch(setSearchList(searchData));
+        if (searchData.expireTime <= Date.now()) {
+          cacheInstance.delete(searchText);
+        } else {
+          store.dispatch(setSearchWord(searchText));
+          store.dispatch(setSearchList(searchData.data));
 
-        return;
+          return;
+        }
       }
 
-      // 결과 없으면 api 호출
+      // 캐싱 안됐으면 api 호출
       const data = await getSearchList({
         sickNm_like: searchText,
       });
@@ -44,9 +50,8 @@ const SearchBar = () => {
       store.dispatch(setSearchWord(searchText));
       store.dispatch(setSearchList(data));
 
-      // 결과 값 IndexedDB에 저장
-      dbInstance.add<SearchDBInterface>({
-        id: searchText,
+      // 결과 값 캐싱
+      cacheInstance.set(searchText, {
         data,
         expireTime: new Date().getTime() + EXPIRE_TIME,
       });
@@ -83,7 +88,7 @@ const SearchBar = () => {
         placeholder="검색어를 입력해주세요."
         onChange={(e) => setSearchText(e.target.value)}
       />
-      <Search height={16} />
+      <SearchIcon height={16} />
     </S.Wrap>
   );
 };
