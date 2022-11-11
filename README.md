@@ -18,6 +18,7 @@
 </br>
 
 ## 🚀 구현 기능
+![auto-complete](https://user-images.githubusercontent.com/30553624/201363887-ce932d68-c50d-4fb8-9d5f-8e46971f0cb2.gif)
 - 공통
   - map 을 class 모듈화해서 검색 결과값 캐싱
   - 결과값이 캐싱되지 않으면 api 호출
