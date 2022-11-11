@@ -1,10 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import { absoluteCenter } from 'styles/mixins';
+import Header from './Header';
 
 const Layout = () => {
   return (
     <S.Wrap>
+      <Header />
       <Outlet />
     </S.Wrap>
   );
@@ -16,7 +18,6 @@ const S = {
   Wrap: styled.div`
     ${absoluteCenter()};
     width: 100%;
-    height: 700px;
-    background-color: ${({ theme }) => theme.colors.blue};
+    height: 100%;
   `,
 };

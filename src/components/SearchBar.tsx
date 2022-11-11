@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useDebounce } from '../modules/hooks/useDebounce';
+import { useState } from 'react';
 import { EXPIRE_TIME, SEARCH_MOVE_DIR } from 'types/enum';
+import { useDebounce } from 'modules/hooks/useDebounce';
 import { useSelector } from 'react-redux';
 import {
   searchSelector,
@@ -10,10 +10,10 @@ import {
   setSearchWord,
 } from 'modules/search/search';
 import { store } from 'modules/store';
-import { SearchDBInterface, SearchInterface } from 'types/api';
+import { SearchDBInterface } from 'types/api';
 import { dbInstance } from 'service/dbInstance';
-import styled from 'styled-components';
 import { getSearchList } from 'api/search';
+import styled from 'styled-components';
 
 const DELAY_TIME = 300;
 
