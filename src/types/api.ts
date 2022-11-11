@@ -5,6 +5,6 @@ export interface SearchInterface {
 
 export interface SearchDBInterface {
   id: string;
-  data: SearchInterface[];
+  data: SearchInterface[] | null;
   expireTime: number;
 }

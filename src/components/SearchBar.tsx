@@ -11,9 +11,9 @@ import {
 } from 'modules/search/search';
 import { store } from 'modules/store';
 import { SearchDBInterface, SearchInterface } from 'types/api';
-import { dbInstance } from 'api/service/dbInstance';
-import getSearchList from 'api/search';
+import { dbInstance } from 'service/dbInstance';
 import styled from 'styled-components';
+import { getSearchList } from 'api/search';
 
 const DELAY_TIME = 300;
 
@@ -36,7 +36,7 @@ const SearchBar = () => {
       }
 
       // 결과 없으면 api 호출
-      const data = await getSearchList<SearchInterface[]>({
+      const data = await getSearchList({
         sickNm_like: searchText,
       });
 

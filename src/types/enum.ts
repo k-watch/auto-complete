@@ -13,5 +13,6 @@ export const SEARCH_MOVE_DIR = {
 
 export const EXPIRE_TIME = 1000 * 60 * 5;
 
-export type SearchMoveDir =
+export type ApiUrlType = typeof API_URL[keyof typeof API_URL];
+export type SearchMoveDirType =
   typeof SEARCH_MOVE_DIR[keyof typeof SEARCH_MOVE_DIR];

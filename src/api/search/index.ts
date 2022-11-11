@@ -1,14 +1,17 @@
-import axiosInstance from 'api';
+import { httpInstance } from 'api/httpInstance';
+import { SearchInterface } from 'types/api';
 import { API_URL } from 'types/enum';
 
-export const getSearchList = async <T>(params: {}) => {
-  console.info('calling api');
+export const getSearchList = async (params: {}) => {
+  let data = null;
 
-  const { data } = await axiosInstance.get<T>(API_URL.GET_SEARCH_LIST, {
-    params,
-  });
+  try {
+    data = await httpInstance.get<SearchInterface[]>(API_URL.GET_SEARCH_LIST, {
+      params,
+    });
+  } catch (e) {
+    console.log(e);
+  }
 
   return data;
 };
-
-export default getSearchList;

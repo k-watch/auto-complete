@@ -7,7 +7,12 @@ const DB_INFO = {
   KEY_PATH: 'id',
 } as const;
 
-export class DbInstance {
+interface DbInstanceInterface {
+  get: (value: IDBValidKey) => Promise<SearchDBInterface | undefined | null>;
+  add: <T>(data: T) => Promise<void>;
+}
+
+export class DbInstance implements DbInstanceInterface {
   private db: IDBPDatabase | null;
 
   constructor() {
@@ -32,27 +37,23 @@ export class DbInstance {
   get = async (
     value: IDBValidKey
   ): Promise<SearchDBInterface | undefined | null> => {
-    if (this.db) {
-      const store = this.db
-        .transaction(DB_INFO.SCHEMA_NAME)
-        .objectStore(DB_INFO.SCHEMA_NAME);
-      const result = await store.get(value);
+    const store = this.db!.transaction(DB_INFO.SCHEMA_NAME).objectStore(
+      DB_INFO.SCHEMA_NAME
+    );
+    const result = await store.get(value);
 
-      if (result) {
-        if (result.expireTime <= Date.now()) {
-          this.db.delete(DB_INFO.SCHEMA_NAME, value);
-          return null;
-        }
-        return result.data;
+    if (result) {
+      if (result.expireTime <= Date.now()) {
+        this.db!.delete(DB_INFO.SCHEMA_NAME, value);
+        return null;
       }
-      return null;
+      return result.data;
     }
+    return null;
   };
 
   add = async <T>(data: T) => {
-    if (this.db) {
-      await this.db.add(DB_INFO.SCHEMA_NAME, { ...data });
-    }
+    await this.db!.add(DB_INFO.SCHEMA_NAME, { ...data });
   };
 }
 

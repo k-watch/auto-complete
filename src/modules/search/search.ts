@@ -1,12 +1,12 @@
 import { SearchInterface } from 'types/api';
-import { SearchMoveDir, SEARCH_MOVE_DIR } from 'types/enum';
+import { SearchMoveDirType, SEARCH_MOVE_DIR } from 'types/enum';
 import { createSlice } from '@reduxjs/toolkit';
 
 interface SearchState {
   searchWord: string;
   searchList: SearchInterface[];
   searchMoveIndex: number;
-  searchMoveDir: SearchMoveDir;
+  searchMoveDir: SearchMoveDirType;
 }
 
 const initialState: SearchState = {
