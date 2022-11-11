@@ -3,8 +3,7 @@ export interface SearchInterface {
   sickNm: string;
 }
 
-export interface SearchDBInterface {
-  id: string;
+export interface CacheInterface {
   data: SearchInterface[] | null;
   expireTime: number;
 }
