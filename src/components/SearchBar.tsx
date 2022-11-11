@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useDebounce } from './useDebounce';
+import { useDebounce } from '../modules/hooks/useDebounce';
 import { EXPIRE_TIME, SEARCH_MOVE_DIR } from 'types/enum';
 import { useSelector } from 'react-redux';
 import {
@@ -44,7 +44,7 @@ const SearchBar = () => {
       store.dispatch(setSearchList(data));
 
       // 결과 값 IndexedDB에 저장
-      await dbInstance.add<SearchDBInterface>({
+      dbInstance.add<SearchDBInterface>({
         id: searchText,
         data,
         expireTime: new Date().getTime() + EXPIRE_TIME,
@@ -99,7 +99,7 @@ const S = {
 
       ::placeholder {
         font-weight: bold;
-        color: #dfdfdf;
+        color: ${({ theme }) => theme.colors.darkGrey};
       }
     }
   `,

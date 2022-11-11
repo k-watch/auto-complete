@@ -17,6 +17,6 @@ const S = {
     ${absoluteCenter()};
     width: 100%;
     height: 700px;
-    background-color: #cde7fe;
+    background-color: ${({ theme }) => theme.colors.blue};
   `,
 };

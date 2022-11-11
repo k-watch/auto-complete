@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-const checkWord = (resultWord: string, searchWord: string) => {
+const setHighlightWord = (resultWord: string, searchWord: string) => {
   if (resultWord.toUpperCase().includes(searchWord.toUpperCase())) {
     return resultWord.split(new RegExp(`(${searchWord})`, 'gi'));
   }
@@ -16,7 +16,7 @@ const SearchItem = (search: SearchProps) => {
 
   useEffect(() => {
     if (search) {
-      setWords(checkWord(search.sickNm, searchWord));
+      setWords(setHighlightWord(search.sickNm, searchWord));
     }
   }, [search]);
 
@@ -39,5 +39,6 @@ export default SearchItem;
 const S = {
   Highlight: styled.span`
     font-weight: bold;
+    color: ${({ theme }) => theme.colors.darkBlue};
   `,
 };
