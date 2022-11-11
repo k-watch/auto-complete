@@ -20,6 +20,7 @@ export default MainPage;
 
 const S = {
   Wrap: styled.div`
+    height: 450px;
     background-color: ${({ theme }) => theme.colors.blue};
   `,
 

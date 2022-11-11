@@ -4,7 +4,7 @@ import { searchSelector } from 'modules/search/search';
 import { SEARCH_MOVE_DIR } from 'types/enum';
 import SearchItem from './SearchItem';
 import styled from 'styled-components';
-import { flexBox } from 'styles/mixins';
+import { boxShadow, flexBox } from 'styles/mixins';
 
 const SELECT_POS = {
   CENTER: 5,
@@ -50,20 +50,20 @@ const SearchList = () => {
   }, [searchMoveIndex]);
 
   return (
-    <S.Wrap ref={ulRef}>
-      {searchList && searchList.length > 0 ? (
-        searchList.map((search: SearchProps, index: number) => (
-          <S.Item
-            key={search.sickCd}
-            isSelect={searchMoveIndex === index ? true : false}
-          >
-            <SearchItem {...search} />
-          </S.Item>
-        ))
-      ) : (
-        <S.NotSearchResult>검색어 없음</S.NotSearchResult>
+    <>
+      {searchList && searchList.length > 0 && (
+        <S.Wrap ref={ulRef}>
+          {searchList.map((search: SearchProps, index: number) => (
+            <S.Item
+              key={search.sickCd}
+              isSelect={searchMoveIndex === index ? true : false}
+            >
+              <SearchItem {...search} />
+            </S.Item>
+          ))}
+        </S.Wrap>
       )}
-    </S.Wrap>
+    </>
   );
 };
 
@@ -71,12 +71,13 @@ export default SearchList;
 
 const S = {
   Wrap: styled.ul`
+    width: 500px;
     height: 400px;
     overflow: auto;
-    margin-top: 30px;
+    margin: 0px auto;
     background-color: white;
-    border-radius: 20px;
-    scrollbar-width: none;
+    border-radius: 12px;
+    ${boxShadow()};
 
     ::-webkit-scrollbar {
       width: 10px;

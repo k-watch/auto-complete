@@ -95,6 +95,7 @@ const S = {
     position: relative;
     width: 500px;
     margin: 50px auto;
+    margin-bottom: 15px;
 
     input {
       width: 100%;
@@ -110,7 +111,7 @@ const S = {
 
     svg {
       position: absolute;
-      top: 35%;
+      top: 36%;
       left: 3.5%;
       color: ${({ theme }) => theme.colors.darkGrey};
     }

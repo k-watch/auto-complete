@@ -16,8 +16,6 @@ export default Layout;
 
 const S = {
   Wrap: styled.div`
-    ${absoluteCenter()};
     width: 100%;
-    height: 100%;
   `,
 };
