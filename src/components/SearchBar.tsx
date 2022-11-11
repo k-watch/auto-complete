@@ -13,6 +13,7 @@ import { store } from 'modules/store';
 import { SearchDBInterface } from 'types/api';
 import { dbInstance } from 'service/dbInstance';
 import { getSearchList } from 'api/search';
+import { ReactComponent as Search } from 'styles/icons/search.svg';
 import styled from 'styled-components';
 
 const DELAY_TIME = 300;
@@ -82,6 +83,7 @@ const SearchBar = () => {
         placeholder="검색어를 입력해주세요."
         onChange={(e) => setSearchText(e.target.value)}
       />
+      <Search height={16} />
     </S.Wrap>
   );
 };
@@ -90,17 +92,27 @@ export default SearchBar;
 
 const S = {
   Wrap: styled.div`
+    position: relative;
+    width: 500px;
+    margin: 50px auto;
+
     input {
       width: 100%;
-      padding: 20px;
+      padding: 20px 40px;
       border-radius: 40px;
       font-size: 18px;
       font-weight: bold;
 
       ::placeholder {
-        font-weight: bold;
         color: ${({ theme }) => theme.colors.darkGrey};
       }
+    }
+
+    svg {
+      position: absolute;
+      top: 35%;
+      left: 3.5%;
+      color: ${({ theme }) => theme.colors.darkGrey};
     }
   `,
 };
