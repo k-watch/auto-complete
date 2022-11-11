@@ -30,7 +30,7 @@ const SearchBar = () => {
       // 검색 결과 캐싱되어 있는지 확인
       const searchData = cacheInstance.get(searchText);
 
-      // 캐싱됐으면 만료시간 전이면 api 호출 패스
+      // 캐싱됐고, 만료시간 전이면 api 호출 패스
       if (searchData) {
         if (searchData.expireTime <= Date.now()) {
           cacheInstance.delete(searchText);
