@@ -20,13 +20,13 @@ export default MainPage;
 
 const S = {
   Wrap: styled.div`
-    ${absoluteCenter()};
-    width: 500px;
+    background-color: ${({ theme }) => theme.colors.blue};
   `,
 
   Title: styled.div`
+    padding-top: 80px;
     text-align: center;
-    font-size: 35px;
+    font-size: 30px;
     font-weight: bold;
 
     p {
