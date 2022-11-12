@@ -14,4 +14,10 @@ export const useDebounce = <T>(
       callback();
     }, delay);
   }, [value]);
+
+  useEffect(() => {
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, []);
 };

@@ -13,7 +13,6 @@
     "@types/react-dom": "^18.0.8",
     "@types/styled-components": "^5.1.26",
     "axios": "^0.27.2",
-    "idb": "^7.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",

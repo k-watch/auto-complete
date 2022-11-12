@@ -1,9 +1,9 @@
 export interface SearchInterface {
   sickCd: string;
-  sickNm: string;
+  sickNm: string[];
 }
 
-export interface CacheInterface {
-  data: SearchInterface[] | null;
+export interface CacheInterface<T> {
+  data: T | null;
   expireTime: number;
 }

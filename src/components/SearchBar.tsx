@@ -1,7 +1,7 @@
-import { CacheInterface } from 'types/api';
+import { SearchInterface } from 'types/api';
 import { CacheInstance } from 'service/cacheInstance';
 import { useState } from 'react';
-import { EXPIRE_TIME, SEARCH_MOVE_DIR } from 'types/enum';
+import { SEARCH_MOVE_DIR } from 'types/enum';
 import { useDebounce } from 'modules/hooks/useDebounce';
 import { useSelector } from 'react-redux';
 import {
@@ -18,7 +18,7 @@ import styled from 'styled-components';
 
 const DELAY_TIME = 300;
 
-const cacheInstance = new CacheInstance<string, CacheInterface>();
+const cacheInstance = new CacheInstance<string, SearchInterface>();
 
 const SearchBar = () => {
   const [searchText, setSearchText] = useState('');
@@ -32,14 +32,9 @@ const SearchBar = () => {
 
       // 캐싱됐고, 만료시간 전이면 api 호출 패스
       if (searchData) {
-        if (searchData.expireTime <= Date.now()) {
-          cacheInstance.delete(searchText);
-        } else {
-          store.dispatch(setSearchWord(searchText));
-          store.dispatch(setSearchList(searchData.data));
-
-          return;
-        }
+        store.dispatch(setSearchWord(searchText));
+        store.dispatch(setSearchList(searchData));
+        return;
       }
 
       // 캐싱 안됐으면 api 호출
@@ -47,14 +42,13 @@ const SearchBar = () => {
         sickNm_like: searchText,
       });
 
-      store.dispatch(setSearchWord(searchText));
-      store.dispatch(setSearchList(data));
+      if (data) {
+        store.dispatch(setSearchWord(searchText));
+        store.dispatch(setSearchList(data));
 
-      // 결과 값 캐싱
-      cacheInstance.set(searchText, {
-        data,
-        expireTime: new Date().getTime() + EXPIRE_TIME,
-      });
+        // 결과 값 캐싱
+        cacheInstance.set(searchText, data);
+      }
     } else {
       store.dispatch(setSearchList([]));
     }
