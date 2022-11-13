@@ -31,7 +31,7 @@
 </br>
 
 ## ✏ 기술 스택 
- JavaScript / React / Redux Toolkit / Axios / styled-components
+ TypeScript / React / Redux Toolkit / Axios / styled-components
  
  </br>
  
