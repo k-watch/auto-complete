@@ -1,8 +1,6 @@
 # Auto Complete
 
 > 검색창 및 검색어 추천 기능 구현
->
-> ### 🌍 [배포링크](https://k-watch.netlify.app/)
 
 <br/>
 
@@ -33,18 +31,21 @@
 </br>
 
 ## ✏ 기술 스택 
- JavaScript / React / Redux Toolkit / Axios / styled-components
+ TypeScript / React / Redux Toolkit / Axios / styled-components
  
  </br>
  
 ## ✔ 구현 방법
  ### 디바운스 사용
  - 검색어를 입력할 때마다 무분별한 api 호출을 막기 위해 디바운스 hook을 추가해 입력시 마지막 값만 호출하도록 최적화했습니다.
- https://github.com/k-watch/auto-complete/blob/0d1d4838fbaca81dc43bac2dcdfabd4e5480f5bb/src/modules/hooks/useDebounce.ts#L5-L17
+ https://github.com/k-watch/auto-complete/blob/9f78eb541adfa97111eb7c2163186947f77275a4/src/modules/hooks/useDebounce.ts#L5-L23
  ### 검색결과 캐싱
- - 검색어를 입력했을 때 과거에 입력했던 결과값을 CacheInstance (map을 클래스로 랩핑) 에서 확인 후 최신화 된 값이라면 그대로 반환합니다.
-   만약 만료시간이 지나 오래된 데이터라고 판단되면 서버에 API 호출을 통해 새로운 값을 받아옵니다.
- https://github.com/k-watch/auto-complete/blob/0d1d4838fbaca81dc43bac2dcdfabd4e5480f5bb/src/components/SearchBar.tsx#L27-L61
+ - 검색어를 입력했을 때 과거에 입력했던 결과값을 CacheInstance 에서 만료시간 확인 후 최신화된 값이면 반환합니다.
+ https://github.com/k-watch/auto-complete/blob/9f78eb541adfa97111eb7c2163186947f77275a4/src/service/cacheInstance.ts#L17-L30
+ - 만약 만료시간이 지나 오래된 데이터라고 판단되면 서버에 API 호출을 통해 새로운 값을 받아옵니다.
+ https://github.com/k-watch/auto-complete/blob/9f78eb541adfa97111eb7c2163186947f77275a4/src/components/SearchBar.tsx#L27-L55
+ - 새로운 값을 CacheInstance 에 set 할 때 만료시간을 세팅해서 넣어줍니다.
+ https://github.com/k-watch/auto-complete/blob/9f78eb541adfa97111eb7c2163186947f77275a4/src/service/cacheInstance.ts#L32-L39
  ### 검색어 하이라이트
  - 검색결과 중 검색어와 동일한 단어 하이라이트 처리를 위해 정규식을 사용해서 검색어를 기준으로 split 했습니다.
  https://github.com/k-watch/auto-complete/blob/0d1d4838fbaca81dc43bac2dcdfabd4e5480f5bb/src/components/SearchItem.tsx#L8-L12
