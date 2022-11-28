@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { ApiUrlType } from 'types/enum';
 
-const BASE_API_URL = 'http://localhost:8000';
+const BASE_API_URL = 'https://auto-complete-server.herokuapp.com/';
 
 const DEFAULT_CONFIG = {
   baseURL: `${BASE_API_URL}`,

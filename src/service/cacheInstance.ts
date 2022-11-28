@@ -25,7 +25,6 @@ export class CacheInstance<K, V> implements CacheInstanceInterface<K, V> {
       }
       return value.data;
     }
-
     return null;
   }
 
